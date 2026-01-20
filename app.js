@@ -1,6 +1,7 @@
 var gl;
 var ySpin = 1;
 var xSpin = 0.25;
+var zSpin = 0;
 
 var InitDemo = function () {
     loadTextResource('shader.vs.glsl', function (vsErr, vsText) {
@@ -173,6 +174,7 @@ var RunDemo = function (vertexShaderText, fragmentShaderText, ratImage, ratModel
 
     var xRotationMatrix = new Float32Array(16);
     var yRotationMatrix = new Float32Array(16);
+	var zRotationMatrix = new Float32Array(16);
 
     //
     // Main render loop
@@ -187,8 +189,10 @@ var RunDemo = function (vertexShaderText, fragmentShaderText, ratImage, ratModel
         glMatrix.mat4.rotate(yRotationMatrix, identityMatrix, angle*ySpin, [0, 1, 0]);
         // Slight tilt
         glMatrix.mat4.rotate(xRotationMatrix, identityMatrix, angle*xSpin , [1, 0, 0]);
+
+		glMatrix.mat4.rotate(zRotationMatrix, identityMatrix, angle*zSpin, [0,0,1]);
         
-        glMatrix.mat4.mul(worldMatrix, yRotationMatrix, xRotationMatrix);
+        glMatrix.mat4.mul(worldMatrix, zRotationMatrix, yRotationMatrix, xRotationMatrix);
         glMatrix.mat4.scale(worldMatrix, worldMatrix, [0.1, 0.1, 0.1]);
         gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
 
